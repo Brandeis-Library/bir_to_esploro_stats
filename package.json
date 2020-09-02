@@ -1,0 +1,17 @@
+{
+  "name": "bir_to_esploro_stats",
+  "version": "1.0.0",
+  "description": "Project to automate retreieval of Solr  view/download stats from Brandeis Institutional Repository and format them for loading into Ex Libris Esploro.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Brandeis",
+    "Esploro",
+    "BIR",
+    "Solr"
+  ],
+  "author": "Chris Underwood",
+  "license": "MIT"
+}
