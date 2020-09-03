@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const geoip = require('geoip-lite');
+const convertTime = require('unix-time');
 
 (async function () {
   const getSolrData = async () => {
@@ -34,6 +35,12 @@ const geoip = require('geoip-lite');
       record.countryCode = recordGeo.country;
       return record;
     }
+  });
+
+  records.forEach(record => {
+    const convertedTime = convertTime(record.time);
+    record.convertedTime = convertedTime;
+    return record;
   });
 
   console.log('records with countryCode ----', records);
