@@ -1,20 +1,40 @@
 const fetch = require('node-fetch');
+const geoip = require('geoip-lite');
 
-const getSolrData = async () => {
-  try {
-    let data = await fetch(
-      'http://localhost:1234/solr/statistics/select?q=*%3A*&fq=isBot%3Afalse&rows=10&wt=json&indent=true'
-    );
-    let dataJson = await data.json();
-    console.log('solrResults docs -------', dataJson.response.docs);
-    console.log('solrResults record start # -------', dataJson.response.start);
-    console.log(
-      'solrResults # num records found-------',
-      dataJson.response.numFound
-    );
-  } catch (error) {
-    console.error('ERROR------', error);
-  }
-};
+(async function () {
+  const getSolrData = async () => {
+    try {
+      let data = await fetch(
+        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=0&fq=isBot%3Afalse&rows=10&wt=json&indent=true`
+      );
+      let dataJson = await data.json();
+      const records = dataJson.response.docs;
+      const startingRecord = dataJson.response.start;
+      const totalRecords = dataJson.response.numFound;
+      //console.log('solrResults records -------', records);
+      //console.log('solrResults record # start  -------', startingRecord);
+      //console.log('solrResults # totalRecords -------', totalRecords);
+      return { records, startingRecord, totalRecords };
+    } catch (error) {
+      console.error('ERROR------', error);
+    }
+  };
 
-getSolrData();
+  const { records, startingRecord, totalRecords } = await getSolrData();
+
+  //console.log(records, startingRecord, totalRecords);
+
+  records.forEach(record => {
+    if (record.hasOwnProperty('countryCode')) {
+      console.log('Has country code.  ', index);
+      return record;
+    } else {
+      const ip = record.ip;
+      const recordGeo = geoip.lookup(ip);
+      record.countryCode = recordGeo.country;
+      return record;
+    }
+  });
+
+  console.log('records with countryCode ----', records);
+})();
