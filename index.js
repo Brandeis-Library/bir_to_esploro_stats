@@ -4,15 +4,16 @@ const geoip = require('geoip-lite');
 const convertTime = require('unix-time');
 
 (async function () {
+  let records;
   // starts CSV file with column headings.
   fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
     `assetID, assetFileID, timestamp, countrycode` + '\n'
   );
 
-  const getSolrData = async () => {
+  const getSolrData = async startNum => {
     try {
       let data = await fetch(
-        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=0&fq=isBot%3Afalse&rows=10&wt=json&indent=true`
+        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=isBot%3Afalse&rows=10&wt=json&indent=true`
       );
       let dataJson = await data.json();
       const records = dataJson.response.docs;
@@ -27,37 +28,43 @@ const convertTime = require('unix-time');
     }
   };
 
-  const { records, startingRecord, totalRecords } = await getSolrData();
+  for (let i = 0; i <= 30; i += 10) {
+    let startNum = i;
 
-  //console.log(records, startingRecord, totalRecords);
-
-  records.forEach(record => {
-    if (record.hasOwnProperty('countryCode')) {
-      console.log('Has country code.  ', index);
-      return record;
-    } else {
-      const ip = record.ip;
-      const recordGeo = geoip.lookup(ip);
-      record.countryCode = recordGeo.country;
-      return record;
-    }
-  });
-
-  records.forEach(record => {
-    const convertedTime = convertTime(record.time);
-    record.convertedTime = convertedTime;
-    return record;
-  });
-
-  records.forEach(record => {
-    fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
-      record.uid +
-        ', PDF-1, ' +
-        record.convertedTime +
-        ', ' +
-        record.countryCode +
-        ', \n'
+    const { records, startingRecord, totalRecords } = await getSolrData(
+      startNum
     );
-  });
-  console.log('records with countryCode ----', records);
+
+    //console.log(records, startingRecord, totalRecords);
+
+    records.forEach(record => {
+      if (record.hasOwnProperty('countryCode')) {
+        console.log('Has country code.  ', index);
+        return record;
+      } else {
+        const ip = record.ip;
+        const recordGeo = geoip.lookup(ip);
+        record.countryCode = recordGeo.country;
+        return record;
+      }
+    });
+
+    records.forEach(record => {
+      const convertedTime = convertTime(record.time);
+      record.convertedTime = convertedTime;
+      return record;
+    });
+
+    records.forEach(record => {
+      fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
+        record.uid +
+          ', PDF-1, ' +
+          record.convertedTime +
+          ', ' +
+          record.countryCode +
+          ', \n'
+      );
+    });
+    console.log('records with countryCode ----', records);
+  }
 })();
