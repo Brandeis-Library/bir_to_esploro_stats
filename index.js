@@ -1,8 +1,14 @@
+const fs = require('fs');
 const fetch = require('node-fetch');
 const geoip = require('geoip-lite');
 const convertTime = require('unix-time');
 
 (async function () {
+  // starts CSV file with column headings.
+  fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
+    `assetID, assetFileID, timestamp, countrycode` + '\n'
+  );
+
   const getSolrData = async () => {
     try {
       let data = await fetch(
