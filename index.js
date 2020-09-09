@@ -5,15 +5,16 @@ const convertTime = require('unix-time');
 
 (async function () {
   let records;
+  fs.truncateSync('./asset_stats1.csv');
   // starts CSV file with column headings.
   fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
     `assetID, assetFileID, timestamp, countrycode` + '\n'
   );
 
-  const getSolrData = async startNum => {
+  const getSolrData = async (startNum, rowIncrease) => {
     try {
       let data = await fetch(
-        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=isBot%3Afalse&rows=10&wt=json&indent=true`
+        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=isBot%3Afalse&rows=${rowIncrease}&wt=json&indent=true`
       );
       let dataJson = await data.json();
       const records = dataJson.response.docs;
@@ -28,11 +29,13 @@ const convertTime = require('unix-time');
     }
   };
 
-  for (let i = 0; i <= 30; i += 10) {
+  const rowIncrease = 1000;
+  for (let i = 0; i <= 100000; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
-      startNum
+      startNum,
+      rowIncrease
     );
 
     //console.log(records, startingRecord, totalRecords);
