@@ -49,5 +49,15 @@ const convertTime = require('unix-time');
     return record;
   });
 
+  records.forEach(record => {
+    fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
+      record.uid +
+        ', PDF-1, ' +
+        record.convertedTime +
+        ', ' +
+        record.countryCode +
+        ', \n'
+    );
+  });
   console.log('records with countryCode ----', records);
 })();
