@@ -1,32 +1,45 @@
 # _{BIR_TO_ESPLORO_STATS}_
 
-#### _{Application to grab the asset view/download stats from the Brandeis Instittutional Repository and convert them to for uploading to BIR's replacement, Ex Libris Esploro.}, {9/9/2020}_
+#### _{Application to grab the asset view/download stats from the Brandeis Instittutional Repository and convert them to for uploading to BIR's replacement, Ex Libris Esploro.}, {9/11/2020}_
 
 #### By _**{Chris Underwood, Library Application Developer, Brandeis University Library}**_
 
 ## Description
 
-_{This is a detailed description of your application. Its purpose and usage. Give as much detail as needed to explain what the application does, and any other information you want users or other developers to have. }_
+\_{ The goal of the application is to retreive the usage statistics from the current Brandeis Institutional Repository (DSpace) and it's Solr datastore.
+
+The application iterates a specified number of times, grabbing a set (ex 1000) of records from the datastore using a REST API and then processes them to fit the Fedora format in the Ex Libris Esploro documentation. The application creates the country code from the IP address, the Unix time stamp from the ISO 8601 time stamp, and the fills in a default asset File ID. In the future a conversion for the UID from Solr to an ID understandable by Esploro.
+}\_
 
 ## Setup/Installation Requirements
 
-- _This is a great place_
-- _to list setup instructions_
-- _in a simple_
-- _easy-to-understand_
-- _format_
+- _Make sure you have Node.js on your computer_
+- _Clone the repo into a folder of your choice_
+- _CD into that directory_
+- _Open the file in your text editor of choice to make edits._
+- _Update the Solr URL index.js getSolrData & another necessary fields_
+- _run node index.js in the command line_
 
+// Sample Solr query URL
 http://localhost:1234/solr/statistics/select?q=_%3A_&fq=isBot%3Afalse&rows=10&wt=json&indent=true
+
+// Sample Solr search home page URL
 http://localhost:1234/solr/#/statistics/query
 
-_{Leave nothing to chance! You want it to be easy for potential users, employers and collaborators to run your app. Do I need to run a server? How should I set up my databases? Is there other code this app depends on?}_
+\_{
+To access the Solr REST API at our institution we need to be logged into the server so that may be another prcoess.
+
+Look at the known bugs section for a tip on how to increase your document search size.
+}\_
 
 ## Known Bugs
 
 \_{
-The number of stats records in BIR is approaching 1.5 million which is well beyond what MacOS X has as the default. I used the command below to temporarily (reverts on a reboot) up the limits. I can do 250k, and could probably do more.
+The number of stats records in BIR is approaching 1.5 million which is well beyond what MacOS X has as the default. I used the command below to temporarily (reverts on a reboot) up the limits. I can do 250k, and it might be able to do more.
 
 sudo launchctl limit maxfiles 1048576 350000
+
+Note that since this uses sudo, you will be required to put in your system password.
 
 If you want to make this permanent, you can try putting the command in ~/.bash*profile. I have not done this so I cannot speak to it's effectiveness. Consider it a starting point.
 }*
@@ -37,7 +50,7 @@ _{libsys-group {@} brandeis {dot} edu}_
 
 ## Technologies Used
 
-_{Tell me about the languages and tools you used to create this app. Assume that I know you probably used HTML and CSS. If you did something really cool using only HTML, point that out.}_
+_{ vanilla-js, Node.js, NPM packages (geoip-lite, node-fetch, unix-time)}_
 
 ### License
 
