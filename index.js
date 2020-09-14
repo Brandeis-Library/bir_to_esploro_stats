@@ -15,7 +15,11 @@ const { lookup } = require('dns');
   const getSolrData = async (startNum, rowIncrease) => {
     try {
       let data = await fetch(
-        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=isBot%3Afalse&rows=${rowIncrease}&wt=json&indent=true`
+        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=type%3A0&fq=isBot%3Afalse7&rows=${rowIncrease}&wt=json&indent=true`
+
+        // http://localhost:1234/solr/statistics/select?q=*%3A*&fq=type%3A0&fq=isBot%3Afalse&wt=json&indent=true
+
+        // http://localhost:1234/solr/statistics/select?q=*%3A*&fq=isBot%3Afalse&fq=type%3A0&fq=statistics_type%3Aview&wt=json&indent=true
       );
       let dataJson = await data.json();
       const records = dataJson.response.docs;
@@ -77,5 +81,6 @@ const { lookup } = require('dns');
       );
     });
     console.log('records with countryCode ----', records);
+    console.log('totalRecods -----------  ', totalRecords);
   }
 })();

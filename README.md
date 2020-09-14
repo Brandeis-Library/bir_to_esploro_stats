@@ -21,7 +21,7 @@ The application iterates a specified number of times, grabbing a set (ex 1000) o
 - _run node index.js in the command line_
 
 // Sample Solr query URL
-http://localhost:1234/solr/statistics/select?q=_%3A_&fq=isBot%3Afalse&rows=10&wt=json&indent=true
+https://localhost:1234/solr/statistics/select?q=_%3A_&fq=isBot%3Afalse&rows=10&wt=json&indent=true
 
 // Sample Solr search home page URL
 http://localhost:1234/solr/#/statistics/query
