@@ -35,9 +35,9 @@ const { IPs } = require('./problemIPs.js');
     }
   };
 
-  const rowIncrease = 10;
-  const loopStart = 155000;
-  for (let i = loopStart; i < loopStart + 10; i += rowIncrease) {
+  const rowIncrease = 1000;
+  const loopStart = 0;
+  for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
@@ -61,19 +61,38 @@ const { IPs } = require('./problemIPs.js');
         if (cc === '') {
           //record.countryCode = '--------';
           // Run await IPs here?
-          console.log(
-            'record.ip  -----  ',
-            record.ip,
-            '  type  ',
-            typeof record.ip
-          );
           let recordIp = record.ip;
-          console.log('recordIp  ', recordIp);
+          //console.log('recordIp  ', recordIp);
           recordIp = recordIp.trim();
-          console.log('recordIp  ', recordIp);
-          record.countryCode = IPs[record.ip];
+          //console.log('recordIp  ', recordIp);
 
-          return record;
+          if (
+            recordIp.startsWith('66.249.93.') ||
+            recordIp.startsWith('66.249.81.') ||
+            recordIp.startsWith('66.249.82') ||
+            recordIp.startsWith('64.233.173.')
+          ) {
+            record.countryCode = 'US';
+
+            return record;
+          } else if (
+            recordIp.startsWith('82.145.208.') ||
+            recordIp.startsWith('82.145.209.') ||
+            recordIp.startsWith('82.145.210.') ||
+            recordIp.startsWith('82.145.211.')
+          ) {
+            record.countryCode = 'NO';
+
+            return record;
+          } else if (recordIp.startsWith('77.111.247.')) {
+            record.countryCode = 'NL';
+
+            return record;
+          } else {
+            record.countryCode = IPs[record.ip];
+
+            return record;
+          }
         } else {
           record.countryCode = cc;
           return record;
