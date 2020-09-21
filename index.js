@@ -17,12 +17,10 @@ const { IPs } = require('./problemIPs.js');
   const getSolrData = async (startNum, rowIncrease) => {
     try {
       let data = await fetch(
-        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=type%3A0&fq=isBot%3Afalse7&bundleName=ORIGINAL&rows=${rowIncrease}&wt=json&indent=true`
+        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=type%3A0&fq=isBot%3Afalse7&fq=bundleName%3AORIGINAL&rows=${rowIncrease}&fq=owningComm%3A81+%7C%7C+owningComm%3A101&fq=!owningColl%3A101&wt=json&indent=true`
       );
 
-      // let data = await fetch(
-      //   `http://localhost:1234/solr/statistics/select?q=*%3A*&fq=uid%3Abdcb39bf-cebd-4c01-bf72-89682e423553&wt=json&indent=true`
-      // );
+      //http://localhost:1234/solr/statistics/select?q=*%3A*&fq=isBot%3Afalse&fq=type%3A0&fq=bundleName%3AORIGINAL&fq=owningComm%3A81+%7C%7C+owningComm%3A101&fq=!owningColl%3A101&wt=json&indent=true
 
       let dataJson = await data.json();
       const records = dataJson.response.docs;
@@ -37,9 +35,9 @@ const { IPs } = require('./problemIPs.js');
     }
   };
 
-  const rowIncrease = 100;
+  const rowIncrease = 10;
   const loopStart = 155000;
-  for (let i = loopStart; i < loopStart + 10000; i += rowIncrease) {
+  for (let i = loopStart; i < loopStart + 10; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
