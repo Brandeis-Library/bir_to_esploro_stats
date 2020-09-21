@@ -4,6 +4,8 @@ const geoip = require('geoip-lite');
 const convertTime = require('unix-time');
 const { lookup } = require('dns');
 
+// brings in IPs object for matching 'bad' IPs to their county
+const { IPs } = require('./problemIPs.js');
 (async function () {
   let records;
   fs.truncateSync('./asset_stats1.csv');
@@ -15,12 +17,13 @@ const { lookup } = require('dns');
   const getSolrData = async (startNum, rowIncrease) => {
     try {
       let data = await fetch(
-        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=type%3A0&fq=isBot%3Afalse7&rows=${rowIncrease}&wt=json&indent=true`
-
-        // http://localhost:1234/solr/statistics/select?q=*%3A*&fq=type%3A0&fq=isBot%3Afalse&wt=json&indent=true
-
-        // http://localhost:1234/solr/statistics/select?q=*%3A*&fq=isBot%3Afalse&fq=type%3A0&fq=statistics_type%3Aview&wt=json&indent=true
+        `http://localhost:1234/solr/statistics/select?q=*%3A*&start=${startNum}&fq=type%3A0&fq=isBot%3Afalse7&bundleName=ORIGINAL&rows=${rowIncrease}&wt=json&indent=true`
       );
+
+      // let data = await fetch(
+      //   `http://localhost:1234/solr/statistics/select?q=*%3A*&fq=uid%3Abdcb39bf-cebd-4c01-bf72-89682e423553&wt=json&indent=true`
+      // );
+
       let dataJson = await data.json();
       const records = dataJson.response.docs;
       const startingRecord = dataJson.response.start;
@@ -34,9 +37,9 @@ const { lookup } = require('dns');
     }
   };
 
-  const rowIncrease = 1000;
-  const loopStart = 1250000;
-  for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
+  const rowIncrease = 100;
+  const loopStart = 155000;
+  for (let i = loopStart; i < loopStart + 10000; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
@@ -46,16 +49,37 @@ const { lookup } = require('dns');
 
     //console.log(records, startingRecord, totalRecords);
 
-    records.forEach(async (record, index) => {
+    await records.forEach(async (record, index) => {
       try {
-        if (record.ip == '10.236.41.1') {
-          record.countryCode = 'US';
+        // if (!record.countryCode) {
+        //   record.countryCode = await IPs[record.ip];
+        //   return record;
+        // }
+        const ip = record.ip;
+        const recordGeo = await geoip.lookup(ip);
+        console.log('recordGeo ++++ ', recordGeo);
+        const cc = await recordGeo.country;
+        console.log('cc ========= ', cc);
+        if (cc === '') {
+          //record.countryCode = '--------';
+          // Run await IPs here?
+          console.log(
+            'record.ip  -----  ',
+            record.ip,
+            '  type  ',
+            typeof record.ip
+          );
+          let recordIp = record.ip;
+          console.log('recordIp  ', recordIp);
+          recordIp = recordIp.trim();
+          console.log('recordIp  ', recordIp);
+          record.countryCode = IPs[record.ip];
+
+          return record;
+        } else {
+          record.countryCode = cc;
           return record;
         }
-        const ip = record.ip;
-        const recordGeo = geoip.lookup(ip);
-        record.countryCode = await recordGeo.country;
-        return record;
       } catch (error) {
         console.error('ERROR ----- ', error);
       }
@@ -69,17 +93,19 @@ const { lookup } = require('dns');
     });
 
     await records.forEach(record => {
+      let recordIP = record.ip.trim();
       fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
         record.uid +
           ', PDF-1, ' +
           record.convertedTime +
           ', ' +
           record.countryCode +
-          ', ' +
+          ',' +
           record.ip +
-          ' \n'
+          '\n'
       );
     });
+
     console.log('records with countryCode ----', records);
     console.log('totalRecods -----------  ', totalRecords);
   }

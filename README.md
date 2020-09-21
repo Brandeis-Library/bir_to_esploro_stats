@@ -75,3 +75,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.}\*
 
 Copyright (c) 2020 **_{Chris Underwood, Library Application Developer}_**
+
+66.249.81 = NL
+64.233.173 = US
+
+141.0.9 = JO
+66.249.82 = US
+
+66.249.93 = US
+64.233.173 = AU
+
+141.0.8 = JO
