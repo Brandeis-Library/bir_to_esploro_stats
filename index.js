@@ -36,7 +36,7 @@ const { IPs } = require('./problemIPs.js');
   };
 
   const rowIncrease = 1000;
-  const loopStart = 0;
+  const loopStart = 250000;
   for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
@@ -54,10 +54,16 @@ const { IPs } = require('./problemIPs.js');
         //   return record;
         // }
         const ip = record.ip;
+        if (ip == '10.236.41.1') {
+          record.countryCode = 'US';
+
+          return record;
+        }
         const recordGeo = await geoip.lookup(ip);
         console.log('recordGeo ++++ ', recordGeo);
         const cc = await recordGeo.country;
         console.log('cc ========= ', cc);
+
         if (cc === '') {
           //record.countryCode = '--------';
           // Run await IPs here?
