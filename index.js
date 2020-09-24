@@ -58,6 +58,10 @@ const { IPs } = require('./problemIPs.js');
           record.countryCode = 'US';
 
           return record;
+        } else if (ip == '185.80.203.179' || ip == '185.222.216.192') {
+          record.countryCode = 'GB';
+
+          return record;
         }
         const recordGeo = await geoip.lookup(ip);
         console.log('recordGeo ++++ ', recordGeo);
@@ -108,6 +112,13 @@ const { IPs } = require('./problemIPs.js');
             return record;
           } else if (recordIp.startsWith('196.3.50.')) {
             record.countryCode = 'CH';
+
+            return record;
+          } else if (
+            recordIp === '185.80.203.179' ||
+            recordIp === '185.222.216.192'
+          ) {
+            record.countryCode = 'GB';
 
             return record;
           } else {
