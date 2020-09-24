@@ -94,6 +94,22 @@ const { IPs } = require('./problemIPs.js');
             record.countryCode = 'NL';
 
             return record;
+          } else if (
+            recordIp.startsWith('141.0.8.') ||
+            recordIp.startsWith('141.0.9.') ||
+            recordIp.startsWith('141.0.11.')
+          ) {
+            record.countryCode = 'SG';
+
+            return record;
+          } else if (recordIp.startsWith('165.225.72.')) {
+            record.countryCode = 'DE';
+
+            return record;
+          } else if (recordIp.startsWith('196.3.50.')) {
+            record.countryCode = 'CH';
+
+            return record;
           } else {
             record.countryCode = IPs[record.ip];
 
