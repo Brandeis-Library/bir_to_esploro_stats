@@ -36,7 +36,7 @@ const { IPs } = require('./problemIPs.js');
   };
 
   const rowIncrease = 1000;
-  const loopStart = 250000;
+  const loopStart = 500000;
   for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
@@ -60,6 +60,10 @@ const { IPs } = require('./problemIPs.js');
           return record;
         } else if (ip == '185.80.203.179' || ip == '185.222.216.192') {
           record.countryCode = 'GB';
+
+          return record;
+        } else if (ip == '103.229.233.145') {
+          record.countryCode = 'IN';
 
           return record;
         }
@@ -101,6 +105,7 @@ const { IPs } = require('./problemIPs.js');
           } else if (
             recordIp.startsWith('141.0.8.') ||
             recordIp.startsWith('141.0.9.') ||
+            recordIp.startsWith('141.0.10.') ||
             recordIp.startsWith('141.0.11.')
           ) {
             record.countryCode = 'SG';
