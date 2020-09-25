@@ -85,6 +85,8 @@ const { IPs } = require('./problemIPs.js');
           record.countryCode = 'CZ';
 
           return record;
+        } else {
+          record.countryCode = IPs[ip];
         }
 
         const recordGeo = await geoip.lookup(ip);
@@ -150,7 +152,10 @@ const { IPs } = require('./problemIPs.js');
             record.countryCode = 'SE';
 
             return record;
-          } else if (recordIp.startsWith('102.13.96.')) {
+          } else if (
+            recordIp.startsWith('102.13.96.') ||
+            recordIp.startsWith('102.23.96.')
+          ) {
             record.countryCode = 'NG';
 
             return record;
