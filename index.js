@@ -36,7 +36,7 @@ const { IPs } = require('./problemIPs.js');
   };
 
   const rowIncrease = 1000;
-  const loopStart = 750000;
+  const loopStart = 1000000;
   for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
@@ -56,9 +56,11 @@ const { IPs } = require('./problemIPs.js');
         const ip = record.ip;
         if (
           ip == '10.236.41.1' ||
+          ip.startsWith('172.19.') ||
           ip.startsWith('172.20.') ||
           ip.startsWith('172.21.') ||
-          ip.startsWith('172.22.')
+          ip.startsWith('172.22.') ||
+          ip.startsWith('45.151.172.')
         ) {
           record.countryCode = 'US';
 
@@ -142,6 +144,14 @@ const { IPs } = require('./problemIPs.js');
             recordIp === '185.222.216.192'
           ) {
             record.countryCode = 'GB';
+
+            return record;
+          } else if (recordIp.startsWith('77.111.245.')) {
+            record.countryCode = 'SE';
+
+            return record;
+          } else if (recordIp.startsWith('102.13.96.')) {
+            record.countryCode = 'NG';
 
             return record;
           } else {
