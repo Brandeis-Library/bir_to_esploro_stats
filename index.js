@@ -36,7 +36,7 @@ const { IPs } = require('./problemIPs.js');
   };
 
   const rowIncrease = 1000;
-  const loopStart = 500000;
+  const loopStart = 750000;
   for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
@@ -54,7 +54,12 @@ const { IPs } = require('./problemIPs.js');
         //   return record;
         // }
         const ip = record.ip;
-        if (ip == '10.236.41.1') {
+        if (
+          ip == '10.236.41.1' ||
+          ip.startsWith('172.20.') ||
+          ip.startsWith('172.21.') ||
+          ip.startsWith('172.22.')
+        ) {
           record.countryCode = 'US';
 
           return record;
@@ -62,11 +67,24 @@ const { IPs } = require('./problemIPs.js');
           record.countryCode = 'GB';
 
           return record;
-        } else if (ip == '103.229.233.145') {
+        } else if (
+          ip == '103.229.233.145' ||
+          ip == '103.54.168.17' ||
+          ip == '160.20.5.56'
+        ) {
           record.countryCode = 'IN';
 
           return record;
+        } else if (ip == '154.71.70.183') {
+          record.countryCode = 'CI';
+
+          return record;
+        } else if (ip == '185.25.95.132') {
+          record.countryCode = 'CZ';
+
+          return record;
         }
+
         const recordGeo = await geoip.lookup(ip);
         console.log('recordGeo ++++ ', recordGeo);
         const cc = await recordGeo.country;
