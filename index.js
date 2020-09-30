@@ -36,7 +36,8 @@ const { IPs } = require('./problemIPs.js');
   };
 
   const rowIncrease = 1000;
-  const loopStart = 1000000;
+  //const loopStart = 1250000;
+  const loopStart = 0;
   for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
@@ -133,7 +134,9 @@ const { IPs } = require('./problemIPs.js');
             record.countryCode = 'SG';
 
             return record;
-          } else if (recordIp.startsWith('165.225.72.')) {
+          } else if (
+            recordIp.startsWith('165.225.72.' || recordIp == '185.196.29.189')
+          ) {
             record.countryCode = 'DE';
 
             return record;
@@ -175,8 +178,9 @@ const { IPs } = require('./problemIPs.js');
     });
 
     await records.forEach(record => {
-      const convertedTime = convertTime(record.time);
-      record.convertedTime = convertedTime;
+      //const convertedTime = convertTime(record.time);
+      //record.convertedTime = convertedTime;
+      record.convertedTime = record.time;
       return record;
     });
 
