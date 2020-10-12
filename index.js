@@ -1,8 +1,8 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
 const geoip = require('geoip-lite');
+const { lookup } = require('dns'); // part of geoip
 const convertTime = require('unix-time');
-const { lookup } = require('dns');
 
 // brings in IPs object for matching 'bad' IPs to their county
 const { IPs } = require('./problemIPs.js');
@@ -10,12 +10,15 @@ const { IPs } = require('./problemIPs.js');
 // brings in handles to convert UID via matching on owning item
 const { handles } = require('./uidConvertToHandles.js');
 (async function () {
-  let records;
-  fs.truncateSync('./asset_stats_org_date/asset_stats6.csv');
+  //let records;
+  fs.truncateSync('./assets_final_with_handles_unix_time/asset_stats1.csv');
   // starts CSV file with column headings.
-  fs.createWriteStream('./asset_stats_org_date/asset_stats6.csv', {
-    flags: 'a',
-  }).write(`assetID, assetFileID, timestamp, countrycode, ip` + '\n');
+  fs.createWriteStream(
+    './assets_final_with_handles_unix_time/asset_stats1.csv',
+    {
+      flags: 'a',
+    }
+  ).write(`assetID, assetFileID, timestamp, countrycode, ip,` + '\n');
 
   const getSolrData = async (startNum, rowIncrease) => {
     try {
@@ -38,10 +41,10 @@ const { handles } = require('./uidConvertToHandles.js');
     }
   };
 
-  const rowIncrease = 1000;
+  const rowIncrease = 10;
   //const loopStart = 1250000;
-  const loopStart = 1250000;
-  for (let i = loopStart; i < loopStart + 450000; i += rowIncrease) {
+  const loopStart = 0;
+  for (let i = loopStart; i < loopStart + 30; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
@@ -181,18 +184,27 @@ const { handles } = require('./uidConvertToHandles.js');
     });
 
     await records.forEach(record => {
-      //const convertedTime = convertTime(record.time);
-      //record.convertedTime = convertedTime;
-      record.convertedTime = record.time;
+      const owningItem = record.owningItem;
+      const hand = handles[owningItem];
+      record.handle = hand;
       return record;
     });
 
     await records.forEach(record => {
-      let recordIP = record.ip.trim();
-      fs.createWriteStream('./asset_stats_org_date/asset_stats6.csv', {
-        flags: 'a',
-      }).write(
-        record.uid +
+      const convertedTime = convertTime(record.time);
+      record.convertedTime = convertedTime;
+      //record.convertedTime = record.time;
+      return record;
+    });
+
+    await records.forEach(record => {
+      fs.createWriteStream(
+        './assets_final_with_handles_unix_time/asset_stats1.csv',
+        {
+          flags: 'a',
+        }
+      ).write(
+        record.handle +
           ', PDF-1, ' +
           record.convertedTime +
           ', ' +
