@@ -18,7 +18,9 @@ const { handles } = require('./uidConvertToHandles.js');
     {
       flags: 'a',
     }
-  ).write(`assetID, assetFileID, timestamp, countrycode, ip,` + '\n');
+  ).write(
+    `assetID, owningItem, assetFileID, timestamp, countrycode, ip,` + '\n'
+  );
 
   const getSolrData = async (startNum, rowIncrease) => {
     try {
@@ -41,10 +43,10 @@ const { handles } = require('./uidConvertToHandles.js');
     }
   };
 
-  const rowIncrease = 10;
+  const rowIncrease = 1000;
   //const loopStart = 1250000;
   const loopStart = 0;
-  for (let i = loopStart; i < loopStart + 30; i += rowIncrease) {
+  for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
@@ -183,9 +185,9 @@ const { handles } = require('./uidConvertToHandles.js');
       // }
     });
 
-    await records.forEach(record => {
+    await records.forEach(async record => {
       const owningItem = record.owningItem;
-      const hand = handles[owningItem];
+      const hand = await handles[owningItem];
       record.handle = hand;
       return record;
     });
@@ -205,6 +207,8 @@ const { handles } = require('./uidConvertToHandles.js');
         }
       ).write(
         record.handle +
+          ', ' +
+          record.owningItem +
           ', PDF-1, ' +
           record.convertedTime +
           ', ' +
