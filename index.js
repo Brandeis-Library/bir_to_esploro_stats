@@ -6,6 +6,9 @@ const { lookup } = require('dns');
 
 // brings in IPs object for matching 'bad' IPs to their county
 const { IPs } = require('./problemIPs.js');
+
+// brings in handles to convert UID via matching on owning item
+const { handles } = require('./uidConvertToHandles.js');
 (async function () {
   let records;
   fs.truncateSync('./asset_stats_org_date/asset_stats6.csv');
