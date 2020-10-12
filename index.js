@@ -8,11 +8,11 @@ const { lookup } = require('dns');
 const { IPs } = require('./problemIPs.js');
 (async function () {
   let records;
-  fs.truncateSync('./asset_stats1.csv');
+  fs.truncateSync('./asset_stats_org_date/asset_stats6.csv');
   // starts CSV file with column headings.
-  fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
-    `assetID, assetFileID, timestamp, countrycode, ip` + '\n'
-  );
+  fs.createWriteStream('./asset_stats_org_date/asset_stats6.csv', {
+    flags: 'a',
+  }).write(`assetID, assetFileID, timestamp, countrycode, ip` + '\n');
 
   const getSolrData = async (startNum, rowIncrease) => {
     try {
@@ -37,8 +37,8 @@ const { IPs } = require('./problemIPs.js');
 
   const rowIncrease = 1000;
   //const loopStart = 1250000;
-  const loopStart = 0;
-  for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
+  const loopStart = 1250000;
+  for (let i = loopStart; i < loopStart + 450000; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
@@ -186,7 +186,9 @@ const { IPs } = require('./problemIPs.js');
 
     await records.forEach(record => {
       let recordIP = record.ip.trim();
-      fs.createWriteStream('./asset_stats1.csv', { flags: 'a' }).write(
+      fs.createWriteStream('./asset_stats_org_date/asset_stats6.csv', {
+        flags: 'a',
+      }).write(
         record.uid +
           ', PDF-1, ' +
           record.convertedTime +
