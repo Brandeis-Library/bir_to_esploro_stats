@@ -11,10 +11,10 @@ const { IPs } = require('./problemIPs.js');
 const { handles } = require('./uidConvertToHandles.js');
 (async function () {
   //let records;
-  fs.truncateSync('./assets_final_with_handles_unix_time/asset_stats1.csv');
+  fs.truncateSync('./assets_final_with_handles_unix_time/asset_stats6.csv');
   // starts CSV file with column headings.
   fs.createWriteStream(
-    './assets_final_with_handles_unix_time/asset_stats1.csv',
+    './assets_final_with_handles_unix_time/asset_stats6.csv',
     {
       flags: 'a',
     }
@@ -44,9 +44,9 @@ const { handles } = require('./uidConvertToHandles.js');
   };
 
   const rowIncrease = 1000;
-  //const loopStart = 1250000;
-  const loopStart = 0;
-  for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
+  const loopStart = 1250000;
+  //const loopStart = 0;
+  for (let i = loopStart; i < loopStart + 50000; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
@@ -69,7 +69,11 @@ const { handles } = require('./uidConvertToHandles.js');
           ip.startsWith('172.20.') ||
           ip.startsWith('172.21.') ||
           ip.startsWith('172.22.') ||
-          ip.startsWith('45.151.172.')
+          ip.startsWith('45.151.172.') ||
+          ip.startsWith('195.135.13') ||
+          ip.startsWith('91.198.230.') ||
+          ip.startsWith('91.199.3.') ||
+          ip.startsWith('193.109.221.')
         ) {
           record.countryCode = 'US';
 
@@ -115,7 +119,18 @@ const { handles } = require('./uidConvertToHandles.js');
             recordIp.startsWith('66.249.93.') ||
             recordIp.startsWith('66.249.81.') ||
             recordIp.startsWith('66.249.82') ||
-            recordIp.startsWith('64.233.173.')
+            recordIp.startsWith('64.233.173.') ||
+            recordIp.startsWith('45.151.172.') ||
+            recordIp.startsWith('195.135.13') ||
+            recordIp.startsWith('91.198.230.') ||
+            recordIp.startsWith('91.199.3.') ||
+            recordIp.startsWith('91.229.104.') ||
+            recordIp.startsWith('193.109.221.') ||
+            recordIp.startsWith('91.229.105.') ||
+            recordIp.startsWith('91.231.142.') ||
+            recordIp.startsWith('91.231.143.') ||
+            recordIp.startsWith('91.240.71.') ||
+            recordIp.startsWith('193.37.133')
           ) {
             record.countryCode = 'US';
 
@@ -201,7 +216,7 @@ const { handles } = require('./uidConvertToHandles.js');
 
     await records.forEach(record => {
       fs.createWriteStream(
-        './assets_final_with_handles_unix_time/asset_stats1.csv',
+        './assets_final_with_handles_unix_time/asset_stats6.csv',
         {
           flags: 'a',
         }
