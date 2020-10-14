@@ -73,7 +73,17 @@ const { handles } = require('./uidConvertToHandles.js');
           ip.startsWith('195.135.13') ||
           ip.startsWith('91.198.230.') ||
           ip.startsWith('91.199.3.') ||
-          ip.startsWith('193.109.221.')
+          ip.startsWith('193.109.221.') ||
+          ip.startsWith('91.240.71.') ||
+          ip.startsWith('91.231.143.') ||
+          ip.startsWith('91.229.105.') ||
+          ip.startsWith('91.231.142.') ||
+          ip.startsWith('193.37.133') ||
+          ip.startsWith('194.105.158.') ||
+          ip.startsWith('194.105.159.') ||
+          ip.startsWith('194.107.125.') ||
+          ip.startsWith('193.135.13') ||
+          ip.startsWith('91.229.104.')
         ) {
           record.countryCode = 'US';
 
@@ -130,7 +140,10 @@ const { handles } = require('./uidConvertToHandles.js');
             recordIp.startsWith('91.231.142.') ||
             recordIp.startsWith('91.231.143.') ||
             recordIp.startsWith('91.240.71.') ||
-            recordIp.startsWith('193.37.133')
+            recordIp.startsWith('193.37.133') ||
+            recordIp.startsWith('194.105.158.') ||
+            recordIp.startsWith('194.105.159.') ||
+            recordIp.startsWith('194.107.125.')
           ) {
             record.countryCode = 'US';
 
