@@ -11,10 +11,10 @@ const { IPs } = require('./problemIPs.js');
 const { handles } = require('./uidConvertToHandles.js');
 (async function () {
   //let records;
-  fs.truncateSync('./assets_final_with_handles_unix_time/asset_stats1.csv');
+  fs.truncateSync('./assets_final_with_handles_unix_time/asset_stats5.csv');
   // starts CSV file with column headings.
   fs.createWriteStream(
-    './assets_final_with_handles_unix_time/asset_stats1.csv',
+    './assets_final_with_handles_unix_time/asset_stats5.csv',
     {
       flags: 'a',
     }
@@ -41,10 +41,10 @@ const { handles } = require('./uidConvertToHandles.js');
     }
   };
 
-  const rowIncrease = 10;
-  const loopStart = 0;
+  const rowIncrease = 1000;
+  const loopStart = 1000000;
   //const loopStart = 0;
-  for (let i = loopStart; i < loopStart + 10; i += rowIncrease) {
+  for (let i = loopStart; i < loopStart + 250000; i += rowIncrease) {
     let startNum = i;
 
     const { records, startingRecord, totalRecords } = await getSolrData(
@@ -227,7 +227,7 @@ const { handles } = require('./uidConvertToHandles.js');
 
     await records.forEach(record => {
       fs.createWriteStream(
-        './assets_final_with_handles_unix_time/asset_stats1.csv',
+        './assets_final_with_handles_unix_time/asset_stats5.csv',
         {
           flags: 'a',
         }
