@@ -11,3 +11,16 @@
 //    td-0 grab text of td
 //    td-1 grab text of views/downloads
 // convert url from td-0 to Esploro friendly format
+
+const fs = require('fs');
+const path = require('path');
+const cheerio = require('cheerio');
+
+//cheerio.load(fs.readFileSync('path/to/file.html'));
+const filePath = path.join(__dirname, './reports/report-2012-04.html');
+fs.readFile(filePath, 'utf8', function (err, data) {
+  if (err) throw err;
+
+  var $ = cheerio.load(data);
+  console.log($.html());
+});
