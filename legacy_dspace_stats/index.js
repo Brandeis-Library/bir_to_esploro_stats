@@ -18,6 +18,8 @@ const cheerio = require('cheerio');
 
 //cheerio.load(fs.readFileSync('path/to/file.html'));
 const filePath = path.join(__dirname, './reports/report-2012-04.html');
+//let records;
+fs.truncateSync('./saved.csv');
 fs.readFile(filePath, 'utf8', function (err, data) {
   if (err) throw err;
 
