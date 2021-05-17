@@ -6,11 +6,21 @@
 
 // is oai the asset originating system id in Esploro?
 
-// grab table with <th> Number of views text
+// grab table with a manually inserted id="grab" in the table for  Number of views text
+//   Still unsure how to grab all of the reports in one batch.
+//    Perhaps we can put the paths in an array and loop over them
+//    Use the text of the path in filePath and to get the dates for the object name (see below)
+//    The truncation needs to be moved up so that we only truncate once at the beginning of the file. The rest of the data will just be appended.
+// Do one for loop for each  tr in each tableonly since we know how many rows are in table.
 // in each tr
 //    td-0 grab text of td
 //    td-1 grab text of views/downloads
+// conside making the output as objects to optimize finding each record.
+//    Perhaps the title of each obj can be some combination of handle and month
+//    Then if a matching object is not found, then we can just put in a 0 in the spreadsheet
+//    Perhaps we do 2 loops with a master list of handles and then a second loop for month/year.
 // convert url from td-0 to Esploro friendly format
+// A second index.js file/program with build the csv file needed for the load.
 
 const fs = require('fs');
 const path = require('path');
