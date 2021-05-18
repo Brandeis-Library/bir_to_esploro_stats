@@ -46,8 +46,17 @@ const cheerio = require('cheerio');
     const strippedArray = strippedString.split('|');
     const arrayFiltered = strippedArray.filter(entry => entry !== ' ');
 
+    const arrayIntoObjects = [];
+
+    for (i = 0; i < arrayFiltered.length; i += 2) {
+      const obj = {};
+      obj.handle = arrayFiltered[i];
+      obj.count = arrayFiltered[i + 1];
+      arrayIntoObjects.push(obj);
+    }
+
     fs.createWriteStream('./saved.csv', {
       flags: 'a',
-    }).write(`${arrayFiltered}`);
+    }).write(`${JSON.stringify(arrayIntoObjects)}`);
   });
 })();
