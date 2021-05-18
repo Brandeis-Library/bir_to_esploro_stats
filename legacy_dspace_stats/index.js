@@ -43,11 +43,11 @@ const cheerio = require('cheerio');
     strippedString = strippedString.replace(/Item\/Handle/g, '');
     strippedString = strippedString.replace(/Number\sof\sviews/, '');
     strippedString = strippedString.replace(/\s+/g, ' ').trim();
-    //strippedString = strippedString.trim();
-    //const strippedArray = strippedString.split(' ');
+    const strippedArray = strippedString.split('|');
+    const arrayFiltered = strippedArray.filter(entry => entry !== ' ');
 
     fs.createWriteStream('./saved.csv', {
       flags: 'a',
-    }).write(`${strippedString}`);
+    }).write(`${arrayFiltered}`);
   });
 })();
