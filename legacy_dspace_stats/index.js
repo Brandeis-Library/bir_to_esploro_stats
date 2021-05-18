@@ -34,10 +34,14 @@ fs.readFile(filePath, 'utf8', function (err, data) {
   if (err) throw err;
 
   var $ = cheerio.load(data);
-  let rows = $.html('#grab tr');
-  console.log('rows ------', rows);
+  let table = $.html('#grab tr');
+  //console.log('table.rows ------', table.rows);
+
+  const strippedString = table.replace(/(<([^>]+)>)/gi, '');
+
+  console.log(strippedString);
 
   fs.createWriteStream('./saved.csv', {
     flags: 'a',
-  }).write(rows);
+  }).write(`${strippedString}`);
 });
