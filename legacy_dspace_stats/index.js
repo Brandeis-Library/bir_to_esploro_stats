@@ -26,22 +26,28 @@ const fs = require('fs');
 const path = require('path');
 const cheerio = require('cheerio');
 
-//cheerio.load(fs.readFileSync('path/to/file.html'));
-const filePath = path.join(__dirname, './reports/report-2012-04.html');
-//let records;
-fs.truncateSync('./saved.csv');
-fs.readFile(filePath, 'utf8', function (err, data) {
-  if (err) throw err;
+(function () {
+  //cheerio.load(fs.readFileSync('path/to/file.html'));
+  const filePath = path.join(__dirname, './reports/report-2012-04.html');
+  //let records;
+  fs.truncateSync('./saved.csv');
+  fs.readFile(filePath, 'utf8', async function (err, data) {
+    if (err) throw err;
 
-  var $ = cheerio.load(data);
-  let table = $.html('#grab tr');
-  //console.log('table.rows ------', table.rows);
+    var $ = cheerio.load(data);
+    let table = $.html('#grab tr');
+    //console.log('table.rows ------', table.rows);
+    let strippedString = table.replace(/<(td[^>]+)>/gm, ' | ');
+    strippedString = strippedString.replace(/<\/td>/gm, ' || ');
+    strippedString = strippedString.replace(/(<([^>]+)>)/gm, '');
+    strippedString = strippedString.replace(/Item\/Handle/g, '');
+    //strippedString = strippedString.replace(/Number\sof\s views/g, '');
+    strippedString = strippedString.replace(/\s+/g, ' ').trim();
+    //strippedString = strippedString.trim();
+    //const strippedArray = strippedString.split(' ');
 
-  const strippedString = table.replace(/(<([^>]+)>)/gi, '');
-
-  console.log(strippedString);
-
-  fs.createWriteStream('./saved.csv', {
-    flags: 'a',
-  }).write(`${strippedString}`);
-});
+    fs.createWriteStream('./saved.csv', {
+      flags: 'a',
+    }).write(`${strippedString}`);
+  });
+})();
