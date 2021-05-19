@@ -65,12 +65,13 @@ const cheerio = require('cheerio');
         hand = hand.slice(36);
         hand = 'https://hdl.handle.net' + hand;
         arrayIntoObjects[i].handle = hand;
+      } else {
+        const indexLeft = hand.lastIndexOf('(');
+        const indexRight = hand.lastIndexOf(')');
+        hand = hand.slice(indexLeft + 1, indexRight);
+        hand = 'https://hdl.handle.net' + hand;
+        arrayIntoObjects[i].handle = hand;
       }
-      // else {
-
-      //   hand = 'https://hdl.handle.net' + hand;
-      //   arrayIntoObjects[i].handle = hand;
-      // }
       console.log('arr len', arrayIntoObjects.length - 1);
       //console.log('hand------  ', hand);
     }
