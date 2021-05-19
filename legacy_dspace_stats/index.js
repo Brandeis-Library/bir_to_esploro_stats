@@ -27,8 +27,10 @@ const path = require('path');
 const cheerio = require('cheerio');
 
 (function () {
-  //cheerio.load(fs.readFileSync('path/to/file.html'));
-  const filePath = path.join(__dirname, './reports/report-2012-04.html');
+  const reportAddresses = ['report-2012-04.html'];
+  const arrayIntoObjects = [];
+
+  const filePath = path.join(__dirname, `./reports/${reportAddresses[0]}`);
   //let records;
   fs.truncateSync('./saved.csv');
   fs.readFile(filePath, 'utf8', async function (err, data) {
@@ -45,8 +47,6 @@ const cheerio = require('cheerio');
     strippedString = strippedString.replace(/\s+/g, ' ').trim();
     const strippedArray = strippedString.split('|');
     const arrayFiltered = strippedArray.filter(entry => entry !== ' ');
-
-    const arrayIntoObjects = [];
 
     for (i = 0; i < arrayFiltered.length - 1; i += 2) {
       const obj = {};
