@@ -50,9 +50,29 @@ const cheerio = require('cheerio');
 
     for (i = 0; i < arrayFiltered.length; i += 2) {
       const obj = {};
-      obj.handle = arrayFiltered[i];
+      obj.handle = arrayFiltered[i].trim();
       obj.count = arrayFiltered[i + 1];
       arrayIntoObjects.push(obj);
+    }
+    // Sample handle format
+    // 'https://hdl.handle.net/10192/36654',
+
+    for (i = 0; i < arrayIntoObjects.length - 1; i++) {
+      let hand = arrayIntoObjects[i]['handle'];
+      //hand = hand.trim();
+      console.log(i, 'hand', hand);
+      if (hand.startsWith('http://')) {
+        hand = hand.slice(36);
+        hand = 'https://hdl.handle.net' + hand;
+        arrayIntoObjects[i].handle = hand;
+      }
+      // else if (hand.search('longsight') > -1) {
+      //   hand = hand.slice(37);
+      //   hand = 'https://hdl.handle.net' + hand;
+      //   arrayIntoObjects[i].handle = hand;
+      // }
+      console.log('arr len', arrayIntoObjects.length - 1);
+      //console.log('hand------  ', hand);
     }
 
     fs.createWriteStream('./saved.csv', {
