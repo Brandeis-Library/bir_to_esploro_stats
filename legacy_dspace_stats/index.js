@@ -48,7 +48,7 @@ const cheerio = require('cheerio');
 
     const arrayIntoObjects = [];
 
-    for (i = 0; i < arrayFiltered.length; i += 2) {
+    for (i = 0; i < arrayFiltered.length - 1; i += 2) {
       const obj = {};
       obj.handle = arrayFiltered[i].trim();
       obj.count = arrayFiltered[i + 1];
@@ -57,7 +57,7 @@ const cheerio = require('cheerio');
     // Sample handle format
     // 'https://hdl.handle.net/10192/36654',
 
-    for (i = 0; i < arrayIntoObjects.length - 1; i++) {
+    for (i = 0; i < arrayIntoObjects.length; i++) {
       let hand = arrayIntoObjects[i]['handle'];
       //hand = hand.trim();
       console.log(i, 'hand', hand);
@@ -66,8 +66,8 @@ const cheerio = require('cheerio');
         hand = 'https://hdl.handle.net' + hand;
         arrayIntoObjects[i].handle = hand;
       }
-      // else if (hand.search('longsight') > -1) {
-      //   hand = hand.slice(37);
+      // else {
+
       //   hand = 'https://hdl.handle.net' + hand;
       //   arrayIntoObjects[i].handle = hand;
       // }
