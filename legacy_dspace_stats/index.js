@@ -28,7 +28,11 @@ const cheerio = require('cheerio');
 
 (function () {
   try {
-    fs.truncateSync('./saved.csv');
+    fs.truncateSync('./saved.js');
+
+    fs.createWriteStream('./saved.js', {
+      flags: 'a',
+    }).write('exports.dataObjs = ');
     // const reportAddresses = [
     //   'report-2012-04.html',
     //   'report-2012-05.html',
@@ -98,7 +102,7 @@ const cheerio = require('cheerio');
           //console.log('hand------  ', hand);
         }
 
-        fs.createWriteStream('./saved.csv', {
+        fs.createWriteStream('./saved.js', {
           flags: 'a',
         }).write(`${JSON.stringify(arrayIntoObjects)}`);
       });
