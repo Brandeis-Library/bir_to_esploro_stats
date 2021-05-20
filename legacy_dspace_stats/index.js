@@ -68,7 +68,7 @@ const cheerio = require('cheerio');
           const name = reportAddresses[xyz];
           let fileDate = name.slice(7, 14);
           fileDate = fileDate.replace('-', '_');
-          obj.name = handleShort + fileDate;
+          obj.name = fileDate;
 
           arrayIntoObjects.push(obj);
         }
@@ -81,14 +81,18 @@ const cheerio = require('cheerio');
           console.log(i, 'hand', hand);
           if (hand.startsWith('http://')) {
             hand = hand.slice(36);
-            hand = 'https://hdl.handle.net' + hand;
-            arrayIntoObjects[i].handle = hand;
+            const handPlus = 'https://hdl.handle.net' + hand;
+            arrayIntoObjects[i].handle = handPlus;
+            let handleName = arrayIntoObjects[i].name;
+            arrayIntoObjects[i].name = hand + '_' + handleName;
           } else {
             const indexLeft = hand.lastIndexOf('(');
             const indexRight = hand.lastIndexOf(')');
-            hand = hand.slice(indexLeft + 1, indexRight);
-            hand = 'https://hdl.handle.net/' + hand;
-            arrayIntoObjects[i].handle = hand;
+            hand = '/' + hand.slice(indexLeft + 1, indexRight);
+            const handPlus = 'https://hdl.handle.net' + hand;
+            arrayIntoObjects[i].handle = handPlus;
+            let handleName = arrayIntoObjects[i].name;
+            arrayIntoObjects[i].name = hand + '_' + handleName;
           }
           //console.log('arr len', arrayIntoObjects.length - 1);
           //console.log('hand------  ', hand);
