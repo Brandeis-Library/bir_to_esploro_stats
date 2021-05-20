@@ -62,11 +62,14 @@ const cheerio = require('cheerio');
 
         for (i = 0; i < arrayFiltered.length - 1; i += 2) {
           const obj = {};
-          obj.handle = arrayFiltered[i].trim();
+          const handleShort = arrayFiltered[i].trim();
+          obj.handle = handleShort;
           obj.count = arrayFiltered[i + 1];
           const name = reportAddresses[xyz];
-          obj.name = name;
-          console.log('obj', obj);
+          let fileDate = name.slice(7, 14);
+          fileDate = fileDate.replace('-', '_');
+          obj.name = handleShort + fileDate;
+
           arrayIntoObjects.push(obj);
         }
         // Sample handle format
