@@ -84,7 +84,7 @@ const cheerio = require('cheerio');
             const indexLeft = hand.lastIndexOf('(');
             const indexRight = hand.lastIndexOf(')');
             hand = hand.slice(indexLeft + 1, indexRight);
-            hand = 'https://hdl.handle.net' + hand;
+            hand = 'https://hdl.handle.net/' + hand;
             arrayIntoObjects[i].handle = hand;
           }
           //console.log('arr len', arrayIntoObjects.length - 1);
