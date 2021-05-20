@@ -27,57 +27,76 @@ const path = require('path');
 const cheerio = require('cheerio');
 
 (function () {
-  const reportAddresses = ['report-2012-04.html'];
-  const arrayIntoObjects = [];
+  try {
+    fs.truncateSync('./saved.csv');
+    // const reportAddresses = [
+    //   'report-2012-04.html',
+    //   'report-2012-05.html',
+    //   'report-2012-06.html',
+    // ];
 
-  const filePath = path.join(__dirname, `./reports/${reportAddresses[0]}`);
-  //let records;
-  fs.truncateSync('./saved.csv');
-  fs.readFile(filePath, 'utf8', async function (err, data) {
-    if (err) throw err;
+    const reportAddresses = ['report-2012-04.html'];
+    const arrayIntoObjects = [];
 
-    var $ = cheerio.load(data);
-    let table = $.html('#grab tr');
-    //console.log('table.rows ------', table.rows);
-    let strippedString = table.replace(/<(td[^>]+)>/gm, ' | ');
-    strippedString = strippedString.replace(/<\/td>/gm, ' | ');
-    strippedString = strippedString.replace(/(<([^>]+)>)/gm, '');
-    strippedString = strippedString.replace(/Item\/Handle/g, '');
-    strippedString = strippedString.replace(/Number\sof\sviews/, '');
-    strippedString = strippedString.replace(/\s+/g, ' ').trim();
-    const strippedArray = strippedString.split('|');
-    const arrayFiltered = strippedArray.filter(entry => entry !== ' ');
+    for (let xyz = 0; xyz < reportAddresses.length; xyz++) {
+      const filePath = path.join(
+        __dirname,
+        `./reports/${reportAddresses[xyz]}`
+      );
+      //let records;
 
-    for (i = 0; i < arrayFiltered.length - 1; i += 2) {
-      const obj = {};
-      obj.handle = arrayFiltered[i].trim();
-      obj.count = arrayFiltered[i + 1];
-      arrayIntoObjects.push(obj);
+      fs.readFile(filePath, 'utf8', async function (err, data) {
+        if (err) throw err;
+
+        var $ = cheerio.load(data);
+        let table = $.html('#grab tr');
+        //console.log('table.rows ------', table.rows);
+        let strippedString = table.replace(/<(td[^>]+)>/gm, ' | ');
+        strippedString = strippedString.replace(/<\/td>/gm, ' | ');
+        strippedString = strippedString.replace(/(<([^>]+)>)/gm, '');
+        strippedString = strippedString.replace(/Item\/Handle/g, '');
+        strippedString = strippedString.replace(/Number\sof\sviews/, '');
+        strippedString = strippedString.replace(/\s+/g, ' ').trim();
+        const strippedArray = strippedString.split('|');
+        const arrayFiltered = strippedArray.filter(entry => entry !== ' ');
+
+        for (i = 0; i < arrayFiltered.length - 1; i += 2) {
+          const obj = {};
+          obj.handle = arrayFiltered[i].trim();
+          obj.count = arrayFiltered[i + 1];
+          const name = reportAddresses[xyz];
+          obj.name = name;
+          console.log('obj', obj);
+          arrayIntoObjects.push(obj);
+        }
+        // Sample handle format
+        // 'https://hdl.handle.net/10192/36654',
+
+        for (i = 0; i < arrayIntoObjects.length; i++) {
+          let hand = arrayIntoObjects[i]['handle'];
+          //hand = hand.trim();
+          console.log(i, 'hand', hand);
+          if (hand.startsWith('http://')) {
+            hand = hand.slice(36);
+            hand = 'https://hdl.handle.net' + hand;
+            arrayIntoObjects[i].handle = hand;
+          } else {
+            const indexLeft = hand.lastIndexOf('(');
+            const indexRight = hand.lastIndexOf(')');
+            hand = hand.slice(indexLeft + 1, indexRight);
+            hand = 'https://hdl.handle.net' + hand;
+            arrayIntoObjects[i].handle = hand;
+          }
+          //console.log('arr len', arrayIntoObjects.length - 1);
+          //console.log('hand------  ', hand);
+        }
+
+        fs.createWriteStream('./saved.csv', {
+          flags: 'a',
+        }).write(`${JSON.stringify(arrayIntoObjects)}`);
+      });
     }
-    // Sample handle format
-    // 'https://hdl.handle.net/10192/36654',
-
-    for (i = 0; i < arrayIntoObjects.length; i++) {
-      let hand = arrayIntoObjects[i]['handle'];
-      //hand = hand.trim();
-      console.log(i, 'hand', hand);
-      if (hand.startsWith('http://')) {
-        hand = hand.slice(36);
-        hand = 'https://hdl.handle.net' + hand;
-        arrayIntoObjects[i].handle = hand;
-      } else {
-        const indexLeft = hand.lastIndexOf('(');
-        const indexRight = hand.lastIndexOf(')');
-        hand = hand.slice(indexLeft + 1, indexRight);
-        hand = 'https://hdl.handle.net' + hand;
-        arrayIntoObjects[i].handle = hand;
-      }
-      console.log('arr len', arrayIntoObjects.length - 1);
-      //console.log('hand------  ', hand);
-    }
-
-    fs.createWriteStream('./saved.csv', {
-      flags: 'a',
-    }).write(`${JSON.stringify(arrayIntoObjects)}`);
-  });
+  } catch (error) {
+    console.log(error);
+  }
 })();
