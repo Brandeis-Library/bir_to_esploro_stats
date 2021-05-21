@@ -33,13 +33,13 @@ const cheerio = require('cheerio');
     fs.createWriteStream('./saved.js', {
       flags: 'a',
     }).write('exports.dataObjs = ');
-    // const reportAddresses = [
-    //   'report-2012-04.html',
-    //   'report-2012-05.html',
-    //   'report-2012-06.html',
+    //const reportAddresses = [
+    //'report-2012-04.html',
+    //'report-2012-05.html',
+    //'report-2012-06.html',
     // ];
 
-    const reportAddresses = ['report-2012-04.html'];
+    const reportAddresses = ['report-2017-05.html'];
     const arrayIntoObjects = [];
 
     for (let xyz = 0; xyz < reportAddresses.length; xyz++) {
@@ -83,12 +83,24 @@ const cheerio = require('cheerio');
           let hand = arrayIntoObjects[i]['handle'];
           //hand = hand.trim();
           console.log(i, 'hand', hand);
-          if (hand.startsWith('http://')) {
+          if (hand.startsWith('http://brandeis.longsight.com')) {
             hand = hand.slice(36);
             const handPlus = 'https://hdl.handle.net' + hand;
             arrayIntoObjects[i].handle = handPlus;
             let handleName = arrayIntoObjects[i].name;
             arrayIntoObjects[i].name = hand + '_' + handleName;
+          } else if (hand.startsWith('https://bir.brandeis.edu')) {
+            hand = hand.slice(37);
+            const handPlus = 'https://hdl.handle.net/10192' + hand;
+            arrayIntoObjects[i].handle = handPlus;
+            let handleName = arrayIntoObjects[i].name;
+            arrayIntoObjects[i].name = '/10192' + hand + '_' + handleName;
+          } else if (hand.startsWith('http://bir.brandeis.edu')) {
+            hand = hand.slice(36);
+            const handPlus = 'https://hdl.handle.net/10192' + hand;
+            arrayIntoObjects[i].handle = handPlus;
+            let handleName = arrayIntoObjects[i].name;
+            arrayIntoObjects[i].name = '/10192' + hand + '_' + handleName;
           } else {
             const indexLeft = hand.lastIndexOf('(');
             const indexRight = hand.lastIndexOf(')');
