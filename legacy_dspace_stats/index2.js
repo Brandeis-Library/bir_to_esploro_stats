@@ -27,14 +27,11 @@ const path = require('path');
       }).write(`${objText},`);
     }
 
-    // write each stats object
-    // fs.createWriteStream('./processedObjs.js', {
-    //   flags: 'a',
-    // }).write(`\n`);
-
-    fs.createWriteStream('./processedObjs.js', {
-      flags: 'a',
-    }).write(`}}\n`);
+    setTimeout(function () {
+      fs.createWriteStream('./processedObjs.js', {
+        flags: 'a',
+      }).write(`}}\n`);
+    }, 3000);
   } catch (error) {
     console.error(error);
   }
