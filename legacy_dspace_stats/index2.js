@@ -16,9 +16,11 @@ const path = require('path');
     for (let i = 0; i < dataObjs.length; i++) {
       const newObj = {};
       const oldObj = dataObjs[i];
+      console.log('oldObj  ', oldObj);
       let objName = oldObj.name;
       newObj.handle = oldObj.handle;
-      newObj.count = oldObj.count.length;
+      newObj.count = oldObj.count;
+      console.log('newObj  ', newObj);
       const objText = `"${objName}": ${JSON.stringify(newObj)}`;
 
       // write each stats object
