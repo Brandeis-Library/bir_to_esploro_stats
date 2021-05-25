@@ -33,13 +33,13 @@ const cheerio = require('cheerio');
     fs.createWriteStream('./saved.js', {
       flags: 'a',
     }).write('exports.dataObjs = ');
-    //const reportAddresses = [
-    //'report-2012-04.html',
-    //'report-2012-05.html',
-    //'report-2012-06.html',
-    // ];
+    const reportAddresses = [
+      'report-2012-04.html',
+      //'report-2012-05.html',
+      //'report-2012-06.html',
+    ];
 
-    const reportAddresses = ['report-2017-05.html'];
+    //const reportAddresses = ['report-2017-05.html'];
     const arrayIntoObjects = [];
 
     for (let xyz = 0; xyz < reportAddresses.length; xyz++) {
@@ -47,7 +47,8 @@ const cheerio = require('cheerio');
         __dirname,
         `./reports/${reportAddresses[xyz]}`
       );
-      //let records;
+
+      console.log('xyz filePath  ', xyz, ' ', filePath);
 
       fs.readFile(filePath, 'utf8', async function (err, data) {
         if (err) throw err;
@@ -63,8 +64,8 @@ const cheerio = require('cheerio');
         strippedString = strippedString.replace(/\s+/g, ' ').trim();
         const strippedArray = strippedString.split('|');
         const arrayFiltered = strippedArray.filter(entry => entry !== ' ');
-
-        for (i = 0; i < arrayFiltered.length - 1; i += 2) {
+        console.log('xyz ', xyz, 'arrayFiltered[0] ', arrayFiltered[0]);
+        for (let i = 0; i < arrayFiltered.length - 1; i += 2) {
           const obj = {};
           const handleShort = arrayFiltered[i].trim();
           obj.handle = handleShort;
@@ -79,10 +80,11 @@ const cheerio = require('cheerio');
         // Sample handle format
         // 'https://hdl.handle.net/10192/36654',
 
+        console.log('xyz ', xyz, 'arrayIntoObjects[0] ', arrayIntoObjects[0]);
         for (i = 0; i < arrayIntoObjects.length; i++) {
           let hand = arrayIntoObjects[i]['handle'];
           //hand = hand.trim();
-          console.log(i, 'hand', hand);
+          // console.log(i, 'hand', hand);
           if (hand.startsWith('http://brandeis.longsight.com')) {
             hand = hand.slice(36);
             const handPlus = 'https://hdl.handle.net' + hand;
