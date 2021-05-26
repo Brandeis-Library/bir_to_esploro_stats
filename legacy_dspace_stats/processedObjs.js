@@ -1,5 +1,13 @@
 module.exports = {
   statsObjs: {
+    '/10192/24237_2012_04': {
+      handle: 'https://hdl.handle.net/10192/24237',
+      count: ' 51 ',
+    },
+    '/10192/23677_2012_04': {
+      handle: 'https://hdl.handle.net/10192/23677',
+      count: ' 22 ',
+    },
     '/10192/24386_2012_04': {
       handle: 'https://hdl.handle.net/10192/24386',
       count: ' 67 ',
@@ -16,10 +24,7 @@ module.exports = {
       handle: 'https://hdl.handle.net/10192/23170',
       count: ' 58 ',
     },
-    '/10192/24237_2012_04': {
-      handle: 'https://hdl.handle.net/10192/24237',
-      count: ' 51 ',
-    },
+
     '/10192/22948_2012_04': {
       handle: 'https://hdl.handle.net/10192/22948',
       count: ' 62 ',
@@ -992,10 +997,7 @@ module.exports = {
       handle: 'https://hdl.handle.net/10192/23881',
       count: ' 22 ',
     },
-    '/10192/23677_2012_04': {
-      handle: 'https://hdl.handle.net/10192/23677',
-      count: ' 22 ',
-    },
+
     '/10192/24337_2012_04': {
       handle: 'https://hdl.handle.net/10192/24337',
       count: ' 22 ',

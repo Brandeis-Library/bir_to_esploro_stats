@@ -25,26 +25,24 @@ const fs = require('fs');
 
     console.log('statsObj Testing  ', statsObjs['/10192/24386_2012_04']);
 
-    const statsPromises = handles.map(async handle => {
-      const objIdent = `'/${handle}${year_month}'`;
+    const statsPromises = await handles.map(async handle => {
+      const objIdent = `${handle}${year_month}`;
       console.log('objIdent', objIdent);
-      let indObj = await statsObjs[objIdent];
-      //console.log(' indObj ', indObj, ' objIdent ', objIdent);
-      let count = 0;
-      if (indObj !== undefined) {
-        indObj.count = count;
-      } else {
-        count = indObj.count;
-      }
+      let indObj = await statsObjs['/10192/24237_2012_04'];
 
-      return handle + ',' + count + '/n';
+      if (!objIdent) {
+        return ` ${handle}, 0`;
+      }
+      return ` ${indObj}`;
     });
 
     const statsResolvedPromise = await Promise.all(statsPromises);
-    console.log(statsResolvedPromise);
-    fs.createWriteStream('./individualStats.csv', {
-      flags: 'a',
-    }).write(`${statsResolvedPromise}`);
+    console.log('statsResolvedPromise', statsResolvedPromise);
+    await fs
+      .createWriteStream('./individualStats.csv', {
+        flags: 'a',
+      })
+      .write(`${statsResolvedPromise}`);
   } catch (error) {
     console.error(error);
   }
