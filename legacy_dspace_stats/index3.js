@@ -26,14 +26,17 @@ const fs = require('fs');
     console.log('statsObj Testing  ', statsObjs['/10192/24386_2012_04']);
 
     const statsPromises = await handles.map(async handle => {
-      const objIdent = `${handle}${year_month}`;
+      const objIdent = "'" + handle + year_month + "'";
       console.log('objIdent', objIdent);
-      let indObj = await statsObjs['/10192/24237_2012_04'];
+      let indObj = (await statsObjs[objIdent]) || {
+        handle: handle,
+        count: ' 0 ',
+      };
 
-      if (!objIdent) {
-        return ` ${handle}, 0`;
-      }
-      return ` ${indObj}`;
+      // if (!objIdent) {
+      //   return ` ${handle}, 0`;
+      // }
+      return indObj;
     });
 
     const statsResolvedPromise = await Promise.all(statsPromises);
@@ -42,7 +45,7 @@ const fs = require('fs');
       .createWriteStream('./individualStats.csv', {
         flags: 'a',
       })
-      .write(`${statsResolvedPromise}`);
+      .write(`${JSON.stringify(statsResolvedPromise)}`);
   } catch (error) {
     console.error(error);
   }
