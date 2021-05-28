@@ -18,7 +18,7 @@ const fs = require('fs');
       const obj = {};
       const hand = handles[i];
       obj.count = 0;
-      obj.handle = 'https://hdl.handle.net' + hand;
+      obj.handle = 'https://hdl.handle.net/' + hand;
       //console.log('default obj', obj);
       fs.createWriteStream('./defaultDataObjects.js', {
         flags: 'a',
