@@ -6,13 +6,19 @@ const fs = require('fs');
 
     fs.truncateSync('./defaultDataObjects.js');
 
-    console.log('handles', handles);
-
     await fs
       .createWriteStream('./defaultDataObjects.js', {
         flags: 'a',
       })
-      .write(`${handles}`);
+      .write('module.exports = { defaultStatsObjs: {');
+
+    console.log('handles', handles);
+
+    setTimeout(function () {
+      fs.createWriteStream('./defaultDataObjects.js', {
+        flags: 'a',
+      }).write(`}}\n`);
+    }, 1000);
   } catch (error) {
     console.error(error);
   }
