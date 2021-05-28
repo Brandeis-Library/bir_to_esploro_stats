@@ -19,10 +19,11 @@ const fs = require('fs');
       const hand = handles[i];
       obj.count = 0;
       obj.handle = 'https://hdl.handle.net/' + hand;
+      obj.name = '/' + hand;
       //console.log('default obj', obj);
       fs.createWriteStream('./defaultDataObjects.js', {
         flags: 'a',
-      }).write(`'${hand}': ${JSON.stringify(obj)},`);
+      }).write(`'/${hand}': ${JSON.stringify(obj)},`);
     }
 
     setTimeout(function () {
