@@ -12,8 +12,6 @@ const fs = require('fs');
       })
       .write('module.exports = { defaultStatsObjs: {');
 
-    //console.log('handles', handles);
-    let objString = '';
     for (let i = 0; i < handles.length; i++) {
       const obj = {};
       const hand = handles[i];

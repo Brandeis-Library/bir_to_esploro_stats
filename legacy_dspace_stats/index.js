@@ -84,7 +84,7 @@ const cheerio = require('cheerio');
         for (i = 0; i < arrayIntoObjects.length; i++) {
           let hand = arrayIntoObjects[i]['handle'];
           //hand = hand.trim();
-          // console.log(i, 'hand', hand);
+          //console.log(i, 'hand', hand);
           if (hand.startsWith('http://brandeis.longsight.com')) {
             hand = hand.slice(36);
             const handPlus = 'https://hdl.handle.net' + hand;
